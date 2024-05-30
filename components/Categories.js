@@ -1,7 +1,11 @@
-import { View, Text, StyleSheet } from "react-native";
+import { useState } from "react";
+import { View, Text, StyleSheet, Pressable, Modal, SafeAreaView } from "react-native";
+import { WebView } from 'react-native-webview';
 import { Ionicons, MaterialCommunityIcons, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 
 export default function Categories() {
+    const [isTranscript, setIsTranscript] = useState(false);
+
     return (
         <View style={styles.categories}>
             <Text style={styles.categories_title}>Categories</Text>
@@ -29,10 +33,12 @@ export default function Categories() {
                         <View style={styles.category_box}><Ionicons name="library-sharp" size={35} color="white" /></View>
                         <Text style={styles.category_title}>Library</Text>
                     </View>
-                    <View style={styles.category}>
-                        <View style={styles.category_box}><Ionicons name="document-text" size={35} color="white" /></View>
-                        <Text style={styles.category_title}>Transcript</Text>
-                    </View>
+                    <Pressable onPress={() => { setIsTranscript(true); }}>
+                        <View style={styles.category}>
+                            <View style={styles.category_box}><Ionicons name="document-text" size={35} color="white" /></View>
+                            <Text style={styles.category_title}>Transcript</Text>
+                        </View>
+                    </Pressable>
                     <View style={styles.category}>
                         <View style={styles.category_box}><Ionicons name="calendar" size={35} color="white" /></View>
                         <Text style={styles.category_title}>Events</Text>
@@ -43,6 +49,22 @@ export default function Categories() {
                     </View>
                 </View>
             </View>
+
+            <Modal
+                visible={isTranscript}
+                onRequestClose={() => setIsTranscript(false)}
+                animationType="slide"
+                presentationStyle="pageSheet"
+            >
+                <SafeAreaView style={{ flex: 1 }}>
+                    <WebView
+                        originWhitelist={['https://ku-transcript-activity.vercel.app']}
+                        source={{
+                            uri: 'https://ku-transcript-activity.vercel.app/'
+                        }}
+                    />
+                </SafeAreaView>
+            </Modal>
         </View>
     );
 }
